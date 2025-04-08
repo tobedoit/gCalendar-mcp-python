@@ -1,0 +1,25 @@
+# 환경 변수 파일
+.env
+
+# 가상 환경
+.venv/
+venv/
+ENV/
+env/
+
+# Python 관련
+__pycache__/
+*.py[cod]
+*.so
+.Python
+*.egg-info/
+.installed.cfg
+*.egg
+
+# 빌드 관련
+build/
+dist/
+
+# 기타
+uv.lock
+*.code-workspace

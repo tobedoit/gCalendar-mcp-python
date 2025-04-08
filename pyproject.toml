@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mcp-calendar-python"
+version = "0.1.2"
+description = "MCP server for Google Calendar integration"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [ # verified details를 위해 추가
+    {name = "Jaemin You", email = "2dois2be@gmail.com"}
+]
+license = {text = "MIT"} # verified details를 위해 추가
+dependencies = [
+    "mcp[cli]>=1.6.0",
+    "python-dotenv",
+    "google-api-python-client",
+    "google-auth",
+    "google-auth-oauthlib",
+]
+
+[project.urls] # verified details를 위해 추가
+"Homepage" = "https://github.com/tobedoit/gCalendar-mcp-python"
+"Bug Tracker" = "https://github.com/tobedoit/gCalendar-mcp-python/issues"
+"Source Code" = "https://github.com/tobedoit/gCalendar-mcp-python"
+
+[project.scripts]
+mcp-calendar-python = "mcp_calendar.server:main"

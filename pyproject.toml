@@ -1,23 +1,23 @@
 [build-system]
-requires = ["setuptools>=42", "wheel"]
+requires = ["setuptools>=61.0"]   # wheel 생략해도 빌드 도구가 자동 설치
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "mcp-calendar-python"
-version = "0.1.5"
+version = "0.1.6"
 description = "MCP server for Google Calendar integration"
 readme = "README.md"
 requires-python = ">=3.10"
 authors = [ # verified details를 위해 추가
-    {name = "Jaemin You", email = "2dois2be@gmail.com"}
+  {name = "Jaemin You", email = "2dois2be@gmail.com"}
 ]
 license = {text = "MIT"} # verified details를 위해 추가
 dependencies = [
-    "mcp[cli]>=1.6.0",
-    "python-dotenv",
-    "google-api-python-client",
-    "google-auth",
-    "google-auth-oauthlib",
+  "mcp[cli]>=1.6.0",
+  "python-dotenv>=1.1.0",
+  "google-api-python-client>=2.167.0",
+  "google-auth>=2.39.0",
+  "google-auth-oauthlib>=1.2.2",
 ]
 classifiers = [ # verified details를 위해 추가
   "License :: OSI Approved :: MIT License",
@@ -33,3 +33,12 @@ classifiers = [ # verified details를 위해 추가
 
 [project.scripts]
 mcp-calendar-python = "mcp_calendar.server:main"
+
+## 배포 아카이브에서 제외할 파일
+# [tool.setuptools.exclude-package-data]
+# "*" = ["uv.lock", "tests/*"]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3.5",
+]

@@ -21,5 +21,4 @@ build/
 dist/
 
 # 기타
-uv.lock
 *.code-workspace

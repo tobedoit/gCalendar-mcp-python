@@ -1,8 +1,9 @@
 name: Publish to PyPI
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - 'v*'  # v로 시작하는 모든 태그
 
 jobs:
   deploy:
@@ -10,7 +11,7 @@ jobs:
     environment: release
     permissions:
       id-token: write
-      contents: read
+      contents: write  # 릴리스 생성을 위해 write 권한 필요
 
     steps:
     - uses: actions/checkout@v3
@@ -34,5 +35,22 @@ jobs:
     - name: Build package
       run: python -m build
 
-    - name: Publish package
+    - name: Publish package to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
+
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref_name }}
+        release_name: Release ${{ github.ref_name }}
+        draft: false
+        prerelease: false
+        body: |
+          Release ${{ github.ref_name }}
+          
+          Changes in this Release:
+          - Automated release from tag push
+          
+          See commit history for details.

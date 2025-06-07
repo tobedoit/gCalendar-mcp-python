@@ -4,6 +4,7 @@ import json
 import sys
 import logging
 from dotenv import load_dotenv
+from typing import Any
 from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from mcp.server.fastmcp import FastMCP
@@ -32,10 +33,10 @@ if not GOOGLE_CLIENT_ID or not GOOGLE_CLIENT_SECRET or not GOOGLE_REFRESH_TOKEN:
   sys.exit(1)
 
 @mcp.tool()
-async def create_event(summary: str, start_time: str, end_time: str, description: str = None, 
-                       location: str = None, attendees: list = None, reminders: dict = None) -> str:
+async def create_event(summary: str, start_time: str, end_time: str, description: str | None = None,
+                       location: str | None = None, attendees: list[str] | None = None, reminders: dict[str, Any] | None = None) -> str:
   """Create a calendar event with specified details
-  
+
   Args:
       summary: Event title
       start_time: Start time (ISO format)
@@ -44,12 +45,12 @@ async def create_event(summary: str, start_time: str, end_time: str, description
       location: Event location
       attendees: List of attendee emails
       reminders: Reminder settings for the event
-  
+
   Returns:
       String with event creation confirmation and link
   """
   logger.debug(f'Creating calendar event with args: {locals()}')
-  
+
   try:
     logger.debug('Creating OAuth2 client')
     # Google OAuth2 인증 클라이언트 생성
@@ -61,11 +62,11 @@ async def create_event(summary: str, start_time: str, end_time: str, description
       client_secret=GOOGLE_CLIENT_SECRET
     )
     logger.debug('OAuth2 client created')
-    
+
     logger.debug('Creating calendar service')
     calendar_service = build('calendar', 'v3', credentials=creds)
     logger.debug('Calendar service created')
-    
+
     # 이벤트 객체 생성
     event = {
       'summary': summary,
@@ -78,19 +79,19 @@ async def create_event(summary: str, start_time: str, end_time: str, description
         'timeZone': 'Asia/Seoul'
       }
     }
-    
+
     # 선택적 필드 추가
     if description:
       event['description'] = description
-    
+
     if location:
       event['location'] = location
       logger.debug(f'Location added: {location}')
-    
+
     if attendees:
       event['attendees'] = [{'email': email} for email in attendees]
       logger.debug(f'Attendees added: {event["attendees"]}')
-    
+
     # 알림 설정: 전달된 값이 없으면 기본적으로 10분 전 팝업 알림
     if reminders:
       event['reminders'] = reminders
@@ -103,13 +104,13 @@ async def create_event(summary: str, start_time: str, end_time: str, description
         ]
       }
       logger.debug(f'Default reminders set: {json.dumps(event["reminders"])}')
-    
+
     logger.debug('Attempting to insert event')
     response = calendar_service.events().insert(calendarId='primary', body=event).execute()
     logger.debug(f'Event insert response: {json.dumps(response)}')
-    
+
     return f"Event created: {response.get('htmlLink', 'No link available')}"
-    
+
   except Exception as error:
     logger.debug(f'ERROR OCCURRED:')
     logger.debug(f'Error type: {type(error).__name__}')

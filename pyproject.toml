@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mcp-calendar-python"
-version = "0.2.5"
+version = "0.2.6"
 description = "MCP server for Google Calendar integration"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -13,9 +13,9 @@ authors = [ # verified details를 위해 추가
 ]
 license = {text = "MIT"} # verified details를 위해 추가
 dependencies = [
-  "mcp[cli]>=1.9.4",
-  "python-dotenv>=1.1.0",
-  "google-api-python-client>=2.173.0",
+  "mcp[cli]>=1.12.4",
+  "python-dotenv>=1.1.1",
+  "google-api-python-client>=2.178.0",
   "google-auth>=2.40.3",
   "google-auth-oauthlib>=1.2.2",
 ]

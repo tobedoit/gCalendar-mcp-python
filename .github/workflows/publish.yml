@@ -19,33 +19,50 @@ jobs:
         fetch-depth: 0
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
-        python-version: '3.10'
+        python-version: '3.12'
 
-    - name: Install uv
+    - name: Set up uv
+      uses: astral-sh/setup-uv@v3
+
+    # [수정] 버전 검증 로직 개선 - 환경변수를 사용해서 더 안전하게 처리
+    - name: Verify tag matches project version
       run: |
-        curl -LsSf https://astral.sh/uv/install.sh | sh
-        echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+        python - <<'PY'
+        import tomllib
+        import sys
+        import pathlib
+        from os import environ
+        
+        tag = environ['GITHUB_REF_NAME'].lstrip('v')
+        data = tomllib.loads(pathlib.Path("pyproject.toml").read_text())
+        proj = data["project"]["version"]
+        print(f"tag={tag} project={proj}")
+        sys.exit(0 if tag == proj else 1)
+        PY
 
     - name: Install dependencies
-      run: |
-        uv pip install --system build twine
+      run: uv pip install --system build
 
     - name: Build package
       run: python -m build
 
+    # [추가] 빌드 결과물을 artifact로 저장 - 배포 기록 추적 용이
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: dist-${{ github.ref_name }}
+        path: dist/*
+
     - name: Publish package to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        attestations: true
 
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v2
       with:
         name: Release ${{ github.ref_name }}
-        body: |
-          Release ${{ github.ref_name }}
-          
-          Changes in this Release:
-          - Automated release from tag push
-          
-          See commit history for details.
+        generate_release_notes: true
+        files: dist/*

@@ -8,10 +8,10 @@ version = "0.3.0"
 description = "MCP server for Google Calendar integration"
 readme = "README.md"
 requires-python = ">=3.13"
-authors = [ # verified details를 위해 추가
+authors = [ # verified details를 위해 추가!
   {name = "Jaemin You", email = "2dois2be@gmail.com"}
 ]
-license = {text = "MIT"} # verified details를 위해 추가
+license = {text = "MIT"} # verified details를 위해 추가!
 dependencies = [
   "mcp[cli]>=1.20.0",
   "python-dotenv>=1.2.1",

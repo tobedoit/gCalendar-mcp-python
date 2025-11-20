@@ -1,5 +1,8 @@
 # MCP Calendar
 
+![PyPI](https://img.shields.io/pypi/v/mcp-calendar-python)
+![license](https://img.shields.io/badge/license-MIT-green)
+
 MCP(Model Context Protocol) 서버를 이용한 Google Calendar 이벤트 생성 도구입니다.
 
 

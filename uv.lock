@@ -445,7 +445,7 @@ cli = [
 
 [[package]]
 name = "mcp-calendar-python"
-version = "0.3.0"
+version = "0.3.1"
 source = { editable = "." }
 dependencies = [
     { name = "google-api-python-client" },
